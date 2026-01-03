@@ -2,6 +2,11 @@
 
 **Reright.AI** is a local-first Chrome Extension that uses Chrome's built-in AI (Gemini Nano) to rewrite text. It transforms corporate-speak or weak phrasing into clear, direct, and intellectually honest language that emphasizes logic over jargon.
 
+## ⚡️ How It Works
+Reright.AI intercepts your text and processes it entirely on-device using Chrome's **Prompt API**.
+1.  **Selection Mode**: Highlight any text on a webpage -> Click the floating **"RR"** button -> Copy the best alternative.
+2.  **Popup Mode**: Click the extension icon -> Paste a draft -> Get 3 instant, punchy variations.
+
 ## 🚀 Getting Started (Installation)
 
 Since this extension uses experimental browser APIs, it must be installed as an "unpacked" extension and requires several Chrome flags to be enabled.
@@ -25,8 +30,10 @@ Since this extension uses experimental browser APIs, it must be installed as an 
 4.  Click **Load unpacked** and select the `extension-local` folder.
 
 ## 🛠 Features
-*   **Privacy First**: All rewrites happen locally on your machine. No data is sent to the cloud.
-*   **Paul Graham Persona**: Specifically tuned for directness and clarity.
+*   **100% Local Privacy**: Uses `window.ai` (Gemini Nano). No data ever leaves your browser.
+*   **Stoic Editing Engine**: Automatically removes fluff ("leverage", "utilize") and enforces active voice.
+*   **Instant Context**: Floating UI allows for rapid rewrites without context switching.
+*   **Smart Fallback**: Prioritizes the high-quality **Prompt API**, falling back to the **Rewriter API** only if needed.
 
 ## ⚖️ Licensing
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
