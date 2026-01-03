@@ -40,3 +40,26 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 
 ## ⚠️ Disclaimer
 This is an experimental project using the nascent Chrome Built-in AI APIs (primarily the **Prompt API**). These APIs are subject to change and may break in future Chrome updates.
+
+## 🏗 Technical Architecture
+
+Reright.AI is built on the **Chrome Extension Manifest V3** platform and strictly adheres to the "Local First" philosophy.
+
+*   **Prompt API (Gemini Nano)**: usage via `window.ai.languageModel`. This is the core engine for rewriting text.
+*   **Offscreen Document**: Used to handle clipboard operations or other DOM-related tasks that Service Workers cannot perform directly (though currently primarily reserved for future clipboard DOM parsing if needed).
+*   **Shadow DOM**: The floating button ("RR") and the overlay UI are injected into webpages using Shadow DOM. This ensures that the extension's styles do not bleed into the target website, and vice-versa.
+
+## 📂 File Structure
+
+```text
+extension-local/
+├── manifest.json       # Config: Permissions, scripts, resources
+├── background.js       # Service Worker: Central message bus
+├── content.js          # Logic: Interacts with web pages (DOM, Selection)
+├── content.css         # Styles: Floating button and Overlay UI
+├── popup.html          # UI: The main extension popup window
+├── popup.js            # Logic: Handles manual input in the popup
+├── offscreen.html      # Helper: Offscreen document for DOM capabilities
+├── offscreen.js        # Logic: Offscreen script
+└── icons/              # Assets: App icons (16, 48, 128)
+```
