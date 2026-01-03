@@ -1,4 +1,4 @@
-# Reright.AI - Chrome Extension
+# <img src="extension-local/icons/icon48.png" width="32" height="32" style="vertical-align: middle;"> Reright.AI - Chrome Extension
 
 Enjoy **ZERO cost**, **jargon-free** AI paraphrasing with this Chrome extension. **Reright.AI** is a local-first Chrome Extension that uses Chrome's built-in AI (Gemini Nano) to rewrite text. It transforms corporate-speak or weak phrasing into clear, direct, and intellectually honest language that emphasizes logic over jargon.
 

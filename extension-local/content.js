@@ -22,7 +22,8 @@ function showSelectionIcon(rect) {
 
     selectionIcon = document.createElement('button');
     selectionIcon.className = 'better-way-selection-icon';
-    selectionIcon.innerHTML = 'RR';
+    const iconUrl = chrome.runtime.getURL('icons/icon48.png');
+    selectionIcon.innerHTML = `<img src="${iconUrl}" alt="Reright" style="width: 20px; height: 20px; display: block;">`;
     selectionIcon.title = 'Reright.AI - Transform this text';
 
     // Position at top-right of selection
@@ -189,7 +190,10 @@ function createOverlay() {
     overlay.className = 'better-way-overlay';
     overlay.innerHTML = `
     <div class="better-way-header">
-      <span class="better-way-logo">Reright.AI</span>
+      <div class="better-way-logo-container" style="display: flex; align-items: center; gap: 8px;">
+        <img src="${chrome.runtime.getURL('icons/icon48.png')}" alt="Logo" style="width: 20px; height: 20px;">
+        <span class="better-way-logo">Reright.AI</span>
+      </div>
       <button class="better-way-close" aria-label="Close">&times;</button>
     </div>
     <div class="better-way-content"></div>
