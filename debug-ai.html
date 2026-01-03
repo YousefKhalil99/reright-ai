@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chrome AI Debugger</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            padding: 2rem;
+            line-height: 1.5;
+        }
+
+        .status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .info {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        pre {
+            background: #f8f9fa;
+            padding: 1rem;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Chrome AI API Debugger</h1>
+    <button id="btnCheck">Initialize & Check AI (Click Me)</button>
+    <div id="result" style="margin-top: 20px;">Waiting for user interaction...</div>
+    <h2>Debug Info</h2>
+    <pre id="debug"></pre>
+
+    <script>
+        async function checkAI() {
+            const resultEl = document.getElementById('result');
+            const debugEl = document.getElementById('debug');
+
+            resultEl.textContent = 'Checking...';
+            resultEl.className = 'status info';
+
+            const debugInfo = {
+                userAgent: navigator.userAgent,
+                isSecureContext: window.isSecureContext,
+                hasWindowAi: 'ai' in window,
+                hasWindowModel: 'model' in window,
+                hasRewriter: 'Rewriter' in window,
+                hasAiRewriter: window.ai && 'rewriter' in window.ai,
+                typeofAi: typeof window.ai,
+            };
+
+            debugEl.textContent = JSON.stringify(debugInfo, null, 2);
+
+            // 1. Check for Generic Prompt API
+            if (window.ai && window.ai.languageModel) {
+                try {
+                    const capabilities = await window.ai.languageModel.capabilities();
+                    debugEl.textContent += '\n\nGeneric AI Capabilities: ' + JSON.stringify(capabilities, null, 2);
+                } catch (e) {
+                    debugEl.textContent += '\n\nGeneric AI Error: ' + e.message;
+                }
+            }
+
+            // 2. Check for Rewriter API (Proposal)
+            if (window.Rewriter) {
+                try {
+                    debugEl.textContent += '\n\nRewriter API found at window.Rewriter';
+                    debugEl.textContent += '\nAttempting to create Rewriter (this may trigger download)...';
+
+                    // Attempt to create to check availability
+                    // This must be triggered by a user gesture if model is downloading
+                    const rewriter = await window.Rewriter.create({
+                        sharedContext: "Test context"
+                    });
+                    debugEl.textContent += '\nRewriter created successfully!';
+                    resultEl.className = 'status success';
+                    resultEl.textContent = 'SUCCESS: Rewriter API is available and ready.';
+                    rewriter.destroy();
+                    return;
+                } catch (e) {
+                    debugEl.textContent += '\n\nRewriter Error: ' + e.message;
+                    if (e.message.toLowerCase().includes('gesture')) {
+                        resultEl.className = 'status error';
+                        resultEl.textContent = 'ERROR: Browser requires a user gesture. Please Click the Button again.';
+                    } else if (e.message.toLowerCase().includes('model')) {
+                        resultEl.className = 'status info';
+                        resultEl.textContent = 'INFO: Model might be downloading. Check chrome://components -> Optimization Guide On Device Model.';
+                    } else {
+                        resultEl.className = 'status error';
+                        resultEl.textContent = 'ERROR: Rewriter creation failed: ' + e.message;
+                    }
+                }
+            }
+
+            // 3. Check for window.ai.rewriter
+            if (window.ai && window.ai.rewriter) {
+                try {
+                    const capabilities = await window.ai.rewriter.capabilities();
+                    debugEl.textContent += '\n\nwindow.ai.rewriter Capabilities: ' + JSON.stringify(capabilities, null, 2);
+                    if (capabilities.available === 'readily') {
+                        resultEl.className = 'status success';
+                        resultEl.textContent = 'SUCCESS: window.ai.rewriter is available.';
+                        return;
+                    }
+                } catch (e) {
+                    debugEl.textContent += '\n\nwindow.ai.rewriter Error: ' + e.message;
+                }
+            }
+
+            // Fallback check results
+            if (!window.Rewriter && !(window.ai && window.ai.rewriter)) {
+                resultEl.className = 'status error';
+                resultEl.textContent = 'FAILURE: No Rewriter API found. Check chrome://flags (#rewriter-api-for-gemini-nano).';
+            }
+        }
+
+        document.getElementById('btnCheck').addEventListener('click', checkAI);
+
+        // Initial passive check
+        // checkAI(); // Don't run automatically to avoid confusion about the gesture error
+    </script>
+</body>
+
+</html>

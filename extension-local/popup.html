@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reright.AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">Reright.AI</div>
+      <p class="tagline">Rewrite it right</p>
+    </div>
+
+    <div class="input-section">
+      <textarea id="inputText" placeholder="Paste your weak phrase here..." maxlength="500"></textarea>
+      <div class="word-count">
+        <span id="wordCount">0</span>/100 words
+      </div>
+    </div>
+
+
+
+    <button id="transformBtn" class="transform-btn" disabled>
+      <span class="btn-text">Transform</span>
+      <span class="btn-loader" hidden></span>
+    </button>
+
+    <div id="results" class="results" hidden>
+      <h2>Say this instead:</h2>
+      <ul id="suggestionList"></ul>
+    </div>
+
+    <div id="error" class="error" hidden></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
